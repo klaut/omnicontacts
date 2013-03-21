@@ -33,7 +33,7 @@ module OmniContacts
         {"GData-Version" => "3.0", "Authorization" => "#{token_type} #{token}"}
       end
 
-      def parse_contacts contacts_as_xml
+      def parse_contacts contacts_as_xml, access_token, token_type
         xml = REXML::Document.new(contacts_as_xml)
         contacts = []
         xml.elements.each('//entry') do |entry|
