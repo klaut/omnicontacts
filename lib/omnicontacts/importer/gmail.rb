@@ -20,7 +20,7 @@ module OmniContacts
 
       def fetch_contacts_using_access_token access_token, token_type
         contacts_response = https_get(@contacts_host, @contacts_path, contacts_req_params, contacts_req_headers(access_token, token_type))
-        parse_contacts contacts_response
+        parse_contacts contacts_response, access_token, token_type
       end
 
       private
@@ -45,6 +45,8 @@ module OmniContacts
               gd_full_name = gd_name.elements['gd:fullName']
               contact[:name] = gd_full_name.text if gd_full_name
             end
+            gd_avatar = entry.elements['link[@type="image/*"]']
+            contact[:avatar_url] = gd_avatar.attribute('gd:etag') ? "#{gd_avatar.attribute('href')}?access_token=#{access_token}" : nil
             contacts << contact
           end
         end
